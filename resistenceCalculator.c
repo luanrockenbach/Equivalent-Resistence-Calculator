@@ -15,7 +15,7 @@ float parallelResistence(const float resistence[256], const int response)
 		equivalentResistece += (1/resistence[i]);
 	}
 	
-	return equivalentResistece /= 1;
+	return equivalentResistece = 1/equivalentResistece;
 }
 
 float serieResistence(const float resistence[256], const int response)
@@ -32,39 +32,39 @@ float serieResistence(const float resistence[256], const int response)
 float mistoResistence(const float resistence[256], const int response)
 {
 	float equivalentResistece = 0;
-	int count =0;
-	for(int i=response;i>0;i--)
+	int count =0, control =0;
+	if(response>2)
 	{
-		if(i==response)
+		for(int i=response;i!=0;i--)
 		{
-				if(count == 2)
+			if(count==0)
 			{
-				equivalentResistece += (resistence[i] * resistence[i-1]) / (resistence[i] + resistence[i-1]);
-				count = 0;
+				count ++;
+				equivalentResistece = resistence[i-1];
+				printf("\n\n%f", equivalentResistece);
 			}
-			else if(count >=0 && count <2)
+			else if(control==0 && count >0)
 			{
-				equivalentResistece += resistence[i];
-			count++;
+				equivalentResistece += resistence[i-1];
+				printf("\n\n%f", equivalentResistece);
+				control =1;
+			}
+			else if(control ==1)
+			{
+				//equivalentResistece += (1/resistence[i]);
+				equivalentResistece = (1/resistence[i-1]) + (1/equivalentResistece);
+				equivalentResistece = 1/equivalentResistece;
+				printf("\n\n%f", equivalentResistece);
+				control =0;
 			}
 		}
-		else
-		{
-				if(count == 1)
-			{
-				equivalentResistece += 1/resistence[i];
-				equivalentResistece /= 1;
-				count = 0;
-			}
-			else if(count >=0 && count <1)
-			{
-				equivalentResistece += resistence[i];
-			}
-		} 
-			count++;
-		
+		return equivalentResistece;
 	}
-	return equivalentResistece;
+	else
+	{
+		printf("Desculpe, o valor de resistores que existem no seu circuito Ã© inferior ao mÃ­nimo necessÃ¡rio-\npara calcular uma resistencia mista");
+		return 0;
+	}
 }
 
 int main()
@@ -74,13 +74,13 @@ int main()
 	char circuitType[8] = "none";
 	setlocale(LC_ALL, "Portuguese");
 	
-	printf("============================ Calculadora de resistência Equivalente ======================================"
-		"\nOlá, seja bem vinda(a) e obrigado por usar nosso sistema clona cartão");	
+	printf("============================ Calculadora de resistï¿½ncia Equivalente ======================================"
+		"\nOlï¿½, seja bem vinda(a) e obrigado por usar nosso sistema clona cartï¿½o");	
 
-	printf("\n\n -- Digite a tensão fornecida pela fonte: ");
+	printf("\n\n -- Digite a tensï¿½o fornecida pela fonte: ");
 	scanf("%f", &powerSourceVoltage);
 	
-	printf("\n\n -- Quantos resistores você possui em seu circuito? ");
+	printf("\n\n -- Quantos resistores vocï¿½ possui em seu circuito? ");
 	scanf("%d", &response);
 	
 	for(int i=0;i<response;i++)
@@ -100,7 +100,7 @@ int main()
 				break;
 			case 's':
 			case 'S':
-				printf("\n\n\nSÉRIE");
+				printf("\n\n\nSï¿½RIE");
 				printf("\n\n%f\n\n", serieResistence(resistence, response));
 				control = 1;
 				break;
@@ -111,9 +111,9 @@ int main()
 				control = 1;
 				break;
 			default:
-				printf("\n\n - Quase lá, os resistores estão dispostos de forma:"
+				printf("\n\n - Quase lï¿½, os resistores estï¿½o dispostos de forma:"
 					"\n  - Paralela"
-					"\n  - Série"
+					"\n  - Sï¿½rie"
 					"\n  - Misto"
 					"\n Digite o formato escolhido: ");
 				scanf("%s", circuitType);
