@@ -67,6 +67,20 @@ float mistoResistence(const float resistence[256], const int response)
 	}
 }
 
+float bateryCurrent(const float resistence, const float powerSource)
+{
+	float current =0;
+	current = powerSource/resistence;
+	return current;
+}
+
+float powerSourceWatt(const float voltage, const float current)
+{
+	float power =0;
+	power = voltage*current;
+	return power;
+}
+
 int main()
 {
 	int response, control = 0;
@@ -74,10 +88,10 @@ int main()
 	char circuitType[8] = "none";
 	setlocale(LC_ALL, "Portuguese");
 	
-	printf("============================ Calculadora de resist�ncia Equivalente ======================================"
-		"\nOl�, seja bem vinda(a) e obrigado por usar nosso sistema clona cart�o");	
+	printf("============================ Calculadora de resistência Equivalente ======================================"
+		"\nOlá, seja bem vindo(a) e obrigado por usar nosso sistema clona cartão");	
 
-	printf("\n\n -- Digite a tens�o fornecida pela fonte: ");
+	printf("\n\n -- Digite a tensão fornecida pela fonte: ");
 	scanf("%f", &powerSourceVoltage);
 	
 	printf("\n\n -- Quantos resistores voc� possui em seu circuito? ");
@@ -100,8 +114,10 @@ int main()
 				break;
 			case 's':
 			case 'S':
-				printf("\n\n\nS�RIE");
+				printf("\n\n\nSÉRIE");
 				printf("\n\n%f\n\n", serieResistence(resistence, response));
+				printf("\n\n - A corrente é de: %f"
+					"\n\n - e a potencia da fonte é: %f", bateryCurrent(serieResistence(resistence, response), powerSourceVoltage), powerSourceWatt(powerSourceVoltage, bateryCurrent(serieResistence(resistence, response), powerSourceVoltage)));
 				control = 1;
 				break;
 			case 'm':
