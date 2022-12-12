@@ -81,36 +81,63 @@ void serieResistence(const float resistence[256], const int response, const floa
 	
 }
 
-void mistoResistence(const float resistence[256], const int response, const float powerSource)
+void mixedResistence(const float resistence[256], const int response, const float powerSource)
 {
-	float equivalentResistece = 0;
-	int count =0, control =0;
-	if(response>2)
+	float equivalentResistence = 0;
+	float resistenceEqui[response];
+	int count=0, control=0, ctrl=0;
+	if(response>2 && response%2==0)
 	{
 		for(int i=response;i!=0;i--)
 		{
 			if(count==0)
 			{
 				count ++;
-				equivalentResistece = resistence[i-1];
-				printf("\n\n%f", equivalentResistece);
+				equivalentResistence = resistence[i-1];
+				resistenceEqui[ctrl] = equivalentResistence;
 			}
 			else if(control==0 && count >0)
 			{
-				equivalentResistece += resistence[i-1];
-				printf("\n\n%f", equivalentResistece);
+				equivalentResistence += resistence[i-1];
+				resistenceEqui[ctrl] = equivalentResistence;
 				control =1;
 			}
 			else if(control ==1)
 			{
-				//equivalentResistece += (1/resistence[i]);
-				equivalentResistece = (1/resistence[i-1]) + (1/equivalentResistece);
-				equivalentResistece = 1/equivalentResistece;
-				printf("\n\n%f", equivalentResistece);
+				equivalentResistence = (1/resistence[i-1]) + (1/equivalentResistence);
+				equivalentResistence = 1/equivalentResistence;
+				resistenceEqui[ctrl] = equivalentResistence;
 				control =0;
 			}
+			ctrl++;
 		}
-		//return equivalentResistece;
+		
+		float current = bateryCurrent(equivalentResistence, powerSource);
+		float resistVoltage[256], resistCurrent[256], resistPower[256];
+		
+		resistVoltage[0]=current*resistence[0];
+		resistCurrent[0]=resistVoltage[0]/resistence[0];
+		resistPower[0]=resistVoltage[0]*resistCurrent[0];
+		
+		control =0;
+		
+		for(int j=0;j<response;j++)
+		{
+			if(j>0 && control==0)
+			{
+				resistCurrent[j] = current*(resistenceEqui[response-j]/(resistenceEqui[response-j] + resistence[j]));
+				resistVoltage[j] = resistCurrent[j]*resistence[j];
+				resistPower[j] = resistVoltage[j]*resistCurrent[j];
+				control=1;
+			}
+			else if(control==1)
+			{
+				resistCurrent[j] = current*(resistenceEqui[response-j]/(resistenceEqui[response-j] + resistence[j]));
+				resistVoltage[j] = resistCurrent[j]*resistence[j];
+				resistPower[j] = resistVoltage[j]*resistCurrent[j];
+			}
+			printf("\nR%d: %.3f Ω		Potência: %.3f Watts	 Corrente: %.3f Amperes		Tensão: %.3f Volts", j+1, resistence[j], resistPower[j], resistCurrent[j], resistVoltage[j]);
+		}
 	}
 	else
 	{
@@ -121,10 +148,10 @@ void mistoResistence(const float resistence[256], const int response, const floa
 
 int main()
 {
+	setlocale(LC_ALL, "Portuguese");
 	int response, control = 0;
 	float powerSourceVoltage, resistence[256];
 	char circuitType[8] = "none";
-	setlocale(LC_ALL, "Portuguese");
 	
 	printf("============================ Calculadora de resistência Equivalente ======================================"
 		"\nOlá, seja bem vindo(a) e obrigado por usar nosso sistema clona cartão");	
@@ -159,7 +186,7 @@ int main()
 			case 'm':
 			case 'M':
 				printf("\n\n\nMISTO");
-				mistoResistence(resistence, response, powerSourceVoltage);
+				mixedResistence(resistence, response, powerSourceVoltage);
 				control = 1;
 				break;
 			default:
