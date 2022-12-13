@@ -35,19 +35,18 @@ void parallelResistence(const float resistence[256], const int response, const f
 	float current = bateryCurrent(equivalentResistece, powerSource);
 	
 	printf("\n\n\n============================================ CIRCUITO PARALELO ======================================================"
-		"\n\n - A resistÃªncia equivalente do circuito Ã© de: %.2f Î©"
-		"\n\n - A TensÃ£o fornecida pela fonte Ã© de: %.2f Volts"
-		"\n\n - A corrente total do circuito Ã© de: %.2f Amperes"
-		"\n\n - A potÃªncia da fonte Ã© de: %.2f Watts", equivalentResistece, powerSource, current, powerSourceWatt(powerSource, current));
+		"\n\n - A resistência equivalente do circuito é de: %.2f O"
+		"\n\n - A Tensão fornecida pela fonte é de: %.2f Volts"
+		"\n\n - A corrente total do circuito é de: %.2f Amperes"
+		"\n\n - A potência da fonte é de: %.2f Watts", equivalentResistece, powerSource, current, powerSourceWatt(powerSource, current));
 		
-	printf("\n"
-		"\n------------------------------ TensÃ£o, potÃªncia e Corrente dos resistores: ----------------------------------------");
+	printf("\n\n------------------------------ Tensão, potência e Corrente dos resistores: ----------------------------------------");
 	
 	for(int j=0; j<response; j++)
 	{
 		float resistCurrent = 0;
 		resistCurrent = powerSource/resistence[j];
-		printf("\nR%d: %.2f Î©		PotÃªncia: %.2f Watts	 Corrente: %.2f Amperes		TensÃ£o: %.2f Volts", j+1, resistence[j], pow(powerSource, 2)/resistence[j], resistCurrent, powerSource);
+		printf("\nR%d: %.2f O		Potência: %.2f Watts	 Corrente: %.2f Amperes		Tensão: %.2f Volts", j+1, resistence[j], pow(powerSource, 2)/resistence[j], resistCurrent, powerSource);
 	}
 	
 }
@@ -63,20 +62,19 @@ void serieResistence(const float resistence[256], const int response, const floa
 	
 	float current = bateryCurrent(equivalentResistece, powerSource);
 	
-	printf("\n\n\n============================================ CIRCUITO SÃ‰RIE ======================================================"
-		"\n\n - A resistÃªncia equivalente do circuito Ã© de: %.2f Î©"
-		"\n\n - A TensÃ£o fornecida pela fonte Ã© de: %.2f Volts"
-		"\n\n - A corrente total do circuito Ã© de: %.2f Amperes"
-		"\n\n - A potÃªncia da fonte Ã© de: %.2f Watts", equivalentResistece, powerSource, current, powerSourceWatt(powerSource, current));
+	printf("\n\n\n============================================ CIRCUITO SÉRIE ======================================================"
+		"\n\n - A resistência equivalente do circuito é de: %.2f O"
+		"\n\n - A Tensão fornecida pela fonte é de: %.2f Volts"
+		"\n\n - A corrente total do circuito é de: %.2f Amperes"
+		"\n\n - A potência da fonte é de: %.2f Watts", equivalentResistece, powerSource, current, powerSourceWatt(powerSource, current));
 		
-	printf("\n"
-		"\n------------------------------ TensÃ£o, potÃªncia e Corrente dos resistores: ----------------------------------------");
+	printf("\n\n------------------------------ Tensão, potência e Corrente dos resistores: ----------------------------------------");
 	
 	for(int j=0; j<response; j++)
 	{
 		float resistVoltage = 0;
 		resistVoltage = current * resistence[j];
-		printf("\nR%d: %.2f Î©		PotÃªncia: %.2f Watts	 Corrente: %.2f Amperes		TensÃ£o: %.2f Volts", j+1, resistence[j], pow(current, 2)/resistence[j], current, resistVoltage);
+		printf("\nR%d: %.2f O		Potência: %.2f Watts	 Corrente: %.2f Amperes		Tensão: %.2f Volts", j+1, resistence[j], pow(current, 2)/resistence[j], current, resistVoltage);
 	}
 	
 }
@@ -113,11 +111,20 @@ void mixedResistence(const float resistence[256], const int response, const floa
 		}
 		
 		float current = bateryCurrent(equivalentResistence, powerSource);
+		
+		printf("\n\n\n============================================ CIRCUITO MISTO ======================================================"
+		"\n\n - A resistência equivalente do circuito é de: %.2f O"
+		"\n\n - A Tensão fornecida pela fonte é de: %.2f Volts"
+		"\n\n - A corrente total do circuito é de: %.2f Amperes"
+		"\n\n - A potência da fonte é de: %.2f Watts\n", equivalentResistence, powerSource, current, powerSourceWatt(powerSource, current));
+		
 		float resistVoltage[256], resistCurrent[256], resistPower[256];
 		
 		resistVoltage[0]=current*resistence[0];
 		resistCurrent[0]=resistVoltage[0]/resistence[0];
 		resistPower[0]=resistVoltage[0]*resistCurrent[0];
+		
+		printf("\n\n------------------------------ Tensão, potência e Corrente dos resistores: ----------------------------------------");
 		
 		control =0;
 		
@@ -136,30 +143,31 @@ void mixedResistence(const float resistence[256], const int response, const floa
 				resistVoltage[j] = resistCurrent[j]*resistence[j];
 				resistPower[j] = resistVoltage[j]*resistCurrent[j];
 			}
-			printf("\nR%d: %.3f Î©		PotÃªncia: %.3f Watts	 Corrente: %.3f Amperes		TensÃ£o: %.3f Volts", j+1, resistence[j], resistPower[j], resistCurrent[j], resistVoltage[j]);
+			printf("\nR%d: %.3f O		Potência: %.3f Watts	 Corrente: %.3f Amperes		Tensão: %.3f Volts", j+1, resistence[j], resistPower[j], resistCurrent[j], resistVoltage[j]);
 		}
 	}
 	else
 	{
-		printf("Desculpe, o valor de resistores que existem no seu circuito Ã© inferior ao mÃ­nimo necessÃ¡rio-\npara calcular uma resistencia mista");
-		//return 0;
+		printf("Desculpe, o valor de resistores que existem no seu circuito é inferior ao mínimo necessário-\npara calcular uma resistencia mista, tente rodar o programa"
+			"novamente");
+		exit(0);
 	}
 }
 
 int main()
 {
-	setlocale(LC_ALL, "Portuguese");
+	setlocale(LC_ALL, "Portuguese-Brazilian");
 	int response, control = 0;
 	float powerSourceVoltage, resistence[256];
 	char circuitType[8] = "none";
 	
-	printf("============================ Calculadora de resistÃªncia Equivalente ======================================"
-		"\nOlÃ¡, seja bem vindo(a) e obrigado por usar nosso sistema clona cartÃ£o");	
+	printf("============================ Calculadora de resistência Equivalente ======================================"
+		"\nOlá, seja bem vindo(a) e obrigado por usar nosso sistema clona cartão");	
 
-	printf("\n\n -- Digite a tensÃ£o fornecida pela fonte: ");
+	printf("\n\n -- Digite a tensão fornecida pela fonte: ");
 	scanf("%f", &powerSourceVoltage);
 	
-	printf("\n\n -- Quantos resistores vocï¿½ possui em seu circuito? ");
+	printf("\n\n -- Quantos resistores você possui em seu circuito? ");
 	scanf("%d", &response);
 	
 	for(int i=0;i<response;i++)
@@ -173,26 +181,23 @@ int main()
 		{
 			case 'p':
 			case 'P':
-				//printf("\n\n\nPARALELO");
 				parallelResistence(resistence, response, powerSourceVoltage);
 				control = 1;
 				break;
 			case 's':
 			case 'S':
-				//printf("\n\n\nSÃ‰RIE");
 				serieResistence(resistence, response, powerSourceVoltage);
 				control = 1;
 				break;
 			case 'm':
 			case 'M':
-				printf("\n\n\nMISTO");
 				mixedResistence(resistence, response, powerSourceVoltage);
 				control = 1;
 				break;
 			default:
-				printf("\n\n - Quase lï¿½, os resistores estï¿½o dispostos de forma:"
+				printf("\n\n - Quase lá, os resistores estão dispostos de forma:"
 					"\n  - Paralela"
-					"\n  - Sï¿½rie"
+					"\n  - Série"
 					"\n  - Misto"
 					"\n Digite o formato escolhido: ");
 				scanf("%s", circuitType);
