@@ -7,6 +7,7 @@
 #include <locale.h>
 #include <math.h>
 
+
 float bateryCurrent(const float resistence, const float powerSource)
 {
 	float current =0;
@@ -35,7 +36,7 @@ void parallelResistence(const float resistence[256], const int response, const f
 	float current = bateryCurrent(equivalentResistece, powerSource);
 	
 	printf("\n\n\n============================================ CIRCUITO PARALELO ======================================================"
-		"\n\n - A resistência equivalente do circuito é de: %.2f O"
+		"\n\n - A resistência equivalente do circuito é de: %.2f Ohms"
 		"\n\n - A Tensão fornecida pela fonte é de: %.2f Volts"
 		"\n\n - A corrente total do circuito é de: %.2f Amperes"
 		"\n\n - A potência da fonte é de: %.2f Watts", equivalentResistece, powerSource, current, powerSourceWatt(powerSource, current));
@@ -46,7 +47,7 @@ void parallelResistence(const float resistence[256], const int response, const f
 	{
 		float resistCurrent = 0;
 		resistCurrent = powerSource/resistence[j];
-		printf("\nR%d: %.2f O		Potência: %.2f Watts	 Corrente: %.2f Amperes		Tensão: %.2f Volts", j+1, resistence[j], pow(powerSource, 2)/resistence[j], resistCurrent, powerSource);
+		printf("\nR%d: %.2f Ohms		Potência: %.2f Watts	 Corrente: %.2f Amperes		Tensão: %.2f Volts", j+1, resistence[j], pow(powerSource, 2)/resistence[j], resistCurrent, powerSource);
 	}
 	
 }
@@ -63,7 +64,7 @@ void serieResistence(const float resistence[256], const int response, const floa
 	float current = bateryCurrent(equivalentResistece, powerSource);
 	
 	printf("\n\n\n============================================ CIRCUITO SÉRIE ======================================================"
-		"\n\n - A resistência equivalente do circuito é de: %.2f O"
+		"\n\n - A resistência equivalente do circuito é de: %.2f Ohms"
 		"\n\n - A Tensão fornecida pela fonte é de: %.2f Volts"
 		"\n\n - A corrente total do circuito é de: %.2f Amperes"
 		"\n\n - A potência da fonte é de: %.2f Watts", equivalentResistece, powerSource, current, powerSourceWatt(powerSource, current));
@@ -74,7 +75,7 @@ void serieResistence(const float resistence[256], const int response, const floa
 	{
 		float resistVoltage = 0;
 		resistVoltage = current * resistence[j];
-		printf("\nR%d: %.2f O		Potência: %.2f Watts	 Corrente: %.2f Amperes		Tensão: %.2f Volts", j+1, resistence[j], pow(current, 2)/resistence[j], current, resistVoltage);
+		printf("\nR%d: %.2f Ohms		Potência: %.2f Watts	 Corrente: %.2f Amperes		Tensão: %.2f Volts", j+1, resistence[j], pow(current, 2)/resistence[j], current, resistVoltage);
 	}
 	
 }
@@ -113,7 +114,7 @@ void mixedResistence(const float resistence[256], const int response, const floa
 		float current = bateryCurrent(equivalentResistence, powerSource);
 		
 		printf("\n\n\n============================================ CIRCUITO MISTO ======================================================"
-		"\n\n - A resistência equivalente do circuito é de: %.2f O"
+		"\n\n - A resistência equivalente do circuito é de: %.2f Ohms"
 		"\n\n - A Tensão fornecida pela fonte é de: %.2f Volts"
 		"\n\n - A corrente total do circuito é de: %.2f Amperes"
 		"\n\n - A potência da fonte é de: %.2f Watts\n", equivalentResistence, powerSource, current, powerSourceWatt(powerSource, current));
@@ -143,7 +144,7 @@ void mixedResistence(const float resistence[256], const int response, const floa
 				resistVoltage[j] = resistCurrent[j]*resistence[j];
 				resistPower[j] = resistVoltage[j]*resistCurrent[j];
 			}
-			printf("\nR%d: %.3f O		Potência: %.3f Watts	 Corrente: %.3f Amperes		Tensão: %.3f Volts", j+1, resistence[j], resistPower[j], resistCurrent[j], resistVoltage[j]);
+			printf("\nR%d: %.3f Ohms		Potência: %.3f Watts	 Corrente: %.3f Amperes		Tensão: %.3f Volts", j+1, resistence[j], resistPower[j], resistCurrent[j], resistVoltage[j]);
 		}
 	}
 	else
